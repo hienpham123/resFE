@@ -1,36 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Admin from './Admin'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Resgister'
-import Error from './components/404'
-import ShowProduct from './components/admin/ShowPrd'
-import AddProduct from './components/admin/AddProduct'
-import Category from './components/admin/Category'
-import Cart from './components/admin/Cart'
-import AllProduct from './components/AllProduct'
-import RestaurantDetail from './components/RestaurantDetail'
-import ListProducts from './components/ListProducts';
-import ListSearch from './components/ListSearch';
-import EditProduct from './components/admin/EditProduct'
-import BlogDetail from './components/BlogDetail'
-import DashBoard from './components/admin/Dashboard'
-import User from './components/admin/User'
-import Profile from './components/Profile'
+import React from "react";
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import Admin from "./Admin";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Resgister";
+import Error from "./components/404";
+import ShowProduct from "./components/admin/ShowPrd";
+import AddProduct from "./components/admin/AddProduct";
+import Category from "./components/admin/Category";
+import Cart from "./components/admin/Cart";
+import AllProduct from "./components/AllProduct";
+import RestaurantDetail from "./components/RestaurantDetail";
+import ListProducts from "./components/ListProducts";
+import ListSearch from "./components/ListSearch";
+import EditProduct from "./components/admin/EditProduct";
+import BlogDetail from "./components/BlogDetail";
+import DashBoard from "./components/admin/Dashboard";
+import User from "./components/admin/User";
+import Profile from "./components/Profile";
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-
       <Routes>
         <Route path="/" element={<App />}>
           <Route path="" element={<Home />} />
           <Route path="login" element={<Login />} />
-          <Route path="regist" element={<Register />} />
+          <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
           <Route path="nha-hang" element={<AllProduct />}>
             <Route path="" element={<ListProducts />} />
@@ -61,10 +65,9 @@ ReactDOM.render(
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>
-
     </Router>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

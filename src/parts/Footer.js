@@ -120,21 +120,25 @@ function Footer() {
                 <h3 className="titleFooter">CONTACT</h3>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
                   <span style={{ color: "red", marginRight: "15px" }}>C.</span>
-                  <span style={{ color: "#8f8f8f" }}>Restaurant</span>
+                  <span style={{ color: "#8f8f8f" }}>
+                    Hangxjnkhb2k1 Restaurant
+                  </span>
                 </div>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
                   <span style={{ color: "red", marginRight: "15px" }}>B.</span>
                   <span style={{ color: "#8f8f8f" }}>
-                    144 Xuân thủy, Cầu Giấy, HN
+                    521 Cổ Nhuế, Bắc Từ Liêm, HN
                   </span>
                 </div>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
                   <span style={{ color: "red", marginRight: "15px" }}>T.</span>
-                  <span style={{ color: "#8f8f8f" }}>+84123456789</span>
+                  <span style={{ color: "#8f8f8f" }}>+84965032472</span>
                 </div>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
                   <span style={{ color: "red", marginRight: "15px" }}>E.</span>
-                  <span style={{ color: "#8f8f8f" }}>restaurant@gmail.com</span>
+                  <span style={{ color: "#8f8f8f" }}>
+                    phamthehien2303@gmail.com
+                  </span>
                 </div>
               </Item>
             </Box>
@@ -268,7 +272,7 @@ function Footer() {
           </Box>
         </Container>
         <h2 style={{ margin: "15px 0px", textAlign: "center" }}>
-          Copyright ©2022 All rights reserved | Developed By FastTeam
+          Copyright ©2023 All rights reserved | Developed By Phạm Thế Hiển
         </h2>
       </footer>
     </React.Fragment>

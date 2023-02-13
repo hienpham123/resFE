@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-function Banner({ title, disc, color, path }) {
+const Banner = ({ title, disc, color, path }) => {
   return (
     <Box className="Banner">
       <img style={{ width: "100%" }} src={path} />
@@ -19,6 +19,6 @@ function Banner({ title, disc, color, path }) {
       </Stack>
     </Box>
   );
-}
+};
 
 export default Banner;
