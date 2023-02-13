@@ -1,13 +1,13 @@
-import * as React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import * as React from "react";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-export default function Description({data}) {
+export default function Description({ data }) {
   return (
-    <div style={{marginTop: '15px'}}>
+    <div style={{ marginTop: "15px" }}>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -15,12 +15,10 @@ export default function Description({data}) {
           id="panel1a-header"
           active="true"
         >
-          <Typography  sx={{fontWeight: '600'}}>Description</Typography>
+          <Typography sx={{ fontWeight: "600" }}>Description</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            {data}
-          </Typography>
+          <Typography>{data}</Typography>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -29,13 +27,18 @@ export default function Description({data}) {
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography sx={{fontWeight: '600'}}>shipping {'&'} Returns</Typography>
+          <Typography sx={{ fontWeight: "600" }}>
+            shipping {"&"} Returns
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            <b>7 Days Returns</b><br /> <br />
+            <b>7 Days Returns</b>
+            <br /> <br />
             <span>Cash on Delivery Available</span> <br />
-            <span>Home Delivery <span style={{color: 'red'}}>3 - 4 DAYS</span></span>
+            <span>
+              Home Delivery <span style={{ color: "red" }}>3 - 4 DAYS</span>
+            </span>
           </Typography>
         </AccordionDetails>
       </Accordion>

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import Box, { BoxProps } from '@mui/material/Box';
+import * as React from "react";
+import Box, { BoxProps } from "@mui/material/Box";
 
 function Item(props: BoxProps) {
   const { sx, ...other } = props;
@@ -8,9 +8,9 @@ function Item(props: BoxProps) {
       sx={{
         px: {
           lg: "15px",
-          md: '15px',
-          sm: '0',
-          xs: '0'
+          md: "15px",
+          sm: "0",
+          xs: "0",
         },
         mt: "15px",
         ...sx,
@@ -20,4 +20,4 @@ function Item(props: BoxProps) {
   );
 }
 
-export default Item
+export default Item;

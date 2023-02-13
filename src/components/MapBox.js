@@ -7,7 +7,9 @@ mapboxgl.accessToken =
 
 const Map = () => {
   const mapContainerRef = useRef(null);
-  const [locate, setLocate] = useState([105.78324722545909, 21.038419631821572]);
+  const [locate, setLocate] = useState([
+    105.78324722545909, 21.038419631821572,
+  ]);
 
   // Initialize map when component mounts
   useEffect(() => {
@@ -19,7 +21,7 @@ const Map = () => {
     });
 
     // Create default markers
-    new mapboxgl.Marker().setLngLat(locate).addTo(map)
+    new mapboxgl.Marker().setLngLat(locate).addTo(map);
 
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), "top-right");
