@@ -34,7 +34,7 @@ ReactDOM.render(
         <Route path="/" element={<App />}>
           <Route path="" element={<Home />} />
           <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+          <Route path="regist" element={<Register />} />
           <Route path="profile" element={<Profile />} />
           <Route path="nha-hang" element={<AllProduct />}>
             <Route path="" element={<ListProducts />} />
