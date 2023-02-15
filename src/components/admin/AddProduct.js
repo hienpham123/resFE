@@ -13,6 +13,18 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import NavAdmin from "../../parts/admin/NavAdmin";
 import { axiosAuth, axiosGetProvince, axiosInstance } from "../../utills/axios";
 import { useNavigate } from "react-router-dom";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+export const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 export default function AddProduct() {
   const navigate = useNavigate();
   const [name, setName] = React.useState("");
@@ -44,6 +56,29 @@ export default function AddProduct() {
   //       setAddress(res["data"]);
   //     });
   // }, []);
+
+  React.useEffect(() => {
+    const getProvinces = async () => {
+      await fetchProvince();
+    };
+    getProvinces(); // run it, run it
+  }, []);
+
+  const fetchProvince = () => {
+    fetch("https://provinces.open-api.vn/api/?depth=3")
+      .catch((error) => console.log(error))
+      .then((res) => res.json())
+      .then((json) => {
+        const listProvince = json.map((j) => {
+          return {
+            id: j.code,
+            name: j.name,
+            dist: j.districts,
+          };
+        });
+        setAddress(listProvince);
+      });
+  };
 
   const upLoad = () => {
     axiosAuth
@@ -127,6 +162,7 @@ export default function AddProduct() {
                 value={city}
                 label="Tỉnh/Thành phố"
                 onChange={handleChangeCity}
+                MenuProps={MenuProps}
               >
                 {address.map((city) => {
                   return (
@@ -150,12 +186,13 @@ export default function AddProduct() {
                 value={districts}
                 label="Quận/Huyện"
                 onChange={handleChangeDistricts}
+                MenuProps={MenuProps}
               >
                 {address.map((isCity) => {
-                  if (isCity.id == city) {
-                    return isCity.district.map((dist) => {
+                  if (isCity.id === city) {
+                    return isCity.dist.map((dist) => {
                       return (
-                        <MenuItem key={dist.id} value={dist.id}>
+                        <MenuItem key={dist.id} value={dist.code}>
                           {dist.name}
                         </MenuItem>
                       );
@@ -177,14 +214,15 @@ export default function AddProduct() {
                 value={wards}
                 label="Phường/Xã"
                 onChange={handleChangeWards}
+                MenuProps={MenuProps}
               >
                 {address.map((isCity) => {
-                  if (isCity.id == city) {
-                    return isCity.district.map((dist) => {
-                      if (dist.id == districts) {
-                        return dist.ward.map((ward) => {
+                  if (isCity.id === city) {
+                    return isCity.dist.map((dist) => {
+                      if (dist.code === districts) {
+                        return dist.wards.map((ward) => {
                           return (
-                            <MenuItem key={ward.id} value={ward.id}>
+                            <MenuItem key={ward.id} value={ward.code}>
                               {ward.name}
                             </MenuItem>
                           );
