@@ -11,6 +11,18 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 function Profile() {
   const [name, setName] = useState("");
   const [user, setUser] = useState(false);
@@ -18,11 +30,12 @@ function Profile() {
   const [gender, setGender] = useState("");
   const [birday, setBirday] = useState("");
   const [email, setEmail] = useState("email@gmail.com");
-  const [address, setAddress] = React.useState([]);
+  const [province, setProvince] = React.useState([]);
   const [city, setCity] = React.useState("");
   const [districts, setDistricts] = React.useState("");
   const [wards, setWards] = React.useState("");
   const [addressD, setAddressD] = React.useState("");
+
   const handleGender = (event) => {
     setGender(event.target.value);
   };
@@ -36,7 +49,6 @@ function Profile() {
       .then((res) => {
         setUser(res["data"]);
         setName(res["data"].name);
-        console.log(res["data"]);
         if (res["data"].info != null) {
           setPhone(res["data"]?.info?.phone);
           if (res["data"]?.info?.gender == "Nam") {
@@ -83,21 +95,36 @@ function Profile() {
   const handleChangeWards = (event) => {
     setWards(event.target.value);
   };
+  // React.useEffect(() => {
+  //   axiosAuth
+  //     .get("/api/province")
+  //     .catch((error) => console.log(error))
+  //     .then((res) => {
+  //       setAddress(res["data"]);
+  //     });
+  // }, []);
+
   React.useEffect(() => {
-    axiosAuth
-      .get("/api/province")
-      .catch((error) => console.log(error))
-      .then((res) => {
-        setAddress(res["data"]);
+    fetch("https://provinces.open-api.vn/api/?depth=3")
+      .then((res) => res.json())
+      .then((json) => {
+        const listProvince = json.map((j) => {
+          return {
+            id: j.code,
+            name: j.name,
+            dist: j.districts,
+          };
+        });
+        setProvince(listProvince);
       });
   }, []);
-  console.log(city, districts, wards, addressD);
+
   const handleSave = () => {
-    if (city == "" || districts == "" || wards == "" || addressD == "") {
-      alert("Địa chỉ không được để trống");
-      return;
-    }
-    if (name == "") {
+    // if (city == "" || districts == "" || wards == "" || addressD == "") {
+    //   alert("Địa chỉ không được để trống");
+    //   return;
+    // }
+    if (name === "") {
       alert("Tên không được để trống");
       return;
     } else {
@@ -123,9 +150,9 @@ function Profile() {
         let formDataInfo = new FormData();
         formDataInfo.append("phone", phone);
         formDataInfo.append("address", id);
-        if (gender == 1) formDataInfo.append("gender", "Nam");
-        if (gender == 2) formDataInfo.append("gender", "Nữ");
-        if (gender == 0) formDataInfo.append("gender", "Khác");
+        if (gender === 1) formDataInfo.append("gender", "Nam");
+        if (gender === 2) formDataInfo.append("gender", "Nữ");
+        if (gender === 0) formDataInfo.append("gender", "Khác");
         formDataInfo.append("birday", birday);
         axiosAuth
           .post("api/user-info", formDataInfo)
@@ -142,11 +169,12 @@ function Profile() {
       .post("api/user-vendor")
       .catch((error) => console.log(error))
       .then((res) => {
-        if (res["data"] == 1) {
+        if (res["data"] === 1) {
           alert("Chờ xác nhận!!!");
         }
       });
   };
+
   return (
     <>
       <Container
@@ -166,7 +194,9 @@ function Profile() {
           mt: "15px",
         }}
       >
-        <h1>Xin chào {user?.name} </h1>
+        <h1 style={{ fontSize: "18px", fontWeight: "700", marginLeft: "20px" }}>
+          Xin chào {user?.name} !
+        </h1>
         <Box
           component="form"
           sx={{
@@ -210,7 +240,7 @@ function Profile() {
               sx={{ width: "100%" }}
               id="outlined-name"
               label="Loại tài khoản"
-              value={user?.role == 2 ? "vendor" : "user"}
+              value={user?.role === 2 ? "Vendor" : "User"}
               disabled
             />
           </Item>
@@ -245,9 +275,8 @@ function Profile() {
           <Item>
             <TextField
               sx={{ width: "100%" }}
-              id="outlined-name"
-              label={birday != "" ? "Ngày sinh" : " "}
-              value={birday}
+              label={birday !== "" ? "Ngày sinh" : " "}
+              value={birday === undefined ? "" : birday}
               onChange={(e) => setBirday(e.target.value)}
               type="date"
             />
@@ -284,8 +313,9 @@ function Profile() {
                   label="Tỉnh/Thành phố"
                   onChange={handleChangeCity}
                   required
+                  MenuProps={MenuProps}
                 >
-                  {address.map((city) => {
+                  {province.map((city) => {
                     return (
                       <MenuItem key={city.id} value={city.id}>
                         {city.name}
@@ -310,12 +340,13 @@ function Profile() {
                   label="Quận/Huyện"
                   onChange={handleChangeDistricts}
                   required
+                  MenuProps={MenuProps}
                 >
-                  {address.map((isCity) => {
-                    if (isCity.id == city) {
-                      return isCity.district.map((dist) => {
+                  {province.map((isCity) => {
+                    if (isCity.id === city) {
+                      return isCity.dist.map((dist) => {
                         return (
-                          <MenuItem key={dist.id} value={dist.id}>
+                          <MenuItem key={dist.id} value={dist.code}>
                             {dist.name}
                           </MenuItem>
                         );
@@ -338,14 +369,15 @@ function Profile() {
                   label="Phường/Xã"
                   onChange={handleChangeWards}
                   required
+                  MenuProps={MenuProps}
                 >
-                  {address.map((isCity) => {
-                    if (isCity.id == city) {
-                      return isCity.district.map((dist) => {
-                        if (dist.id == districts) {
-                          return dist.ward.map((ward) => {
+                  {province.map((isCity) => {
+                    if (isCity.id === city) {
+                      return isCity.dist.map((dist) => {
+                        if (dist.code === districts) {
+                          return dist.wards.map((ward) => {
                             return (
-                              <MenuItem key={ward.id} value={ward.id}>
+                              <MenuItem key={ward.id} value={ward.code}>
                                 {ward.name}
                               </MenuItem>
                             );

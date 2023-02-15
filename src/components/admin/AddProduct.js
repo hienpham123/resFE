@@ -11,7 +11,7 @@ import Item from "../../components/Item";
 import { Button } from "@mui/material";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import NavAdmin from "../../parts/admin/NavAdmin";
-import { axiosAuth, axiosInstance } from "../../utills/axios";
+import { axiosAuth, axiosGetProvince, axiosInstance } from "../../utills/axios";
 import { useNavigate } from "react-router-dom";
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -36,14 +36,14 @@ export default function AddProduct() {
   const handleChangeWards = (event) => {
     setWards(event.target.value);
   };
-  React.useEffect(() => {
-    axiosAuth
-      .get("/api/province")
-      .catch((error) => console.log(error))
-      .then((res) => {
-        setAddress(res["data"]);
-      });
-  }, []);
+  // React.useEffect(() => {
+  //   axiosAuth
+  //     .get("/api/province")
+  //     .catch((error) => console.log(error))
+  //     .then((res) => {
+  //       setAddress(res["data"]);
+  //     });
+  // }, []);
 
   const upLoad = () => {
     axiosAuth
