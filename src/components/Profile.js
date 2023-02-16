@@ -12,7 +12,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { MenuProps } from "./admin/AddProduct";
-
 function Profile() {
   const [name, setName] = useState("");
   const [user, setUser] = useState(false);
@@ -20,12 +19,11 @@ function Profile() {
   const [gender, setGender] = useState("");
   const [birday, setBirday] = useState("");
   const [email, setEmail] = useState("email@gmail.com");
-  const [province, setProvince] = React.useState([]);
+  const [address, setAddress] = React.useState([]);
   const [city, setCity] = React.useState("");
   const [districts, setDistricts] = React.useState("");
   const [wards, setWards] = React.useState("");
   const [addressD, setAddressD] = React.useState("");
-
   const handleGender = (event) => {
     setGender(event.target.value);
   };
@@ -39,15 +37,16 @@ function Profile() {
       .then((res) => {
         setUser(res["data"]);
         setName(res["data"].name);
+        console.log(res["data"]);
         if (res["data"].info != null) {
           setPhone(res["data"]?.info?.phone);
-          if (res["data"]?.info?.gender == "Nam") {
+          if (res["data"]?.info?.gender === "Nam") {
             setGender(1);
           }
-          if (res["data"]?.info?.gender == "Nữ") {
+          if (res["data"]?.info?.gender === "Nữ") {
             setGender(2);
           }
-          if (res["data"]?.info?.gender == "khác") {
+          if (res["data"]?.info?.gender === "khác") {
             setGender(0);
           }
           setCity(res["data"]?.info?.is_address.city);
@@ -85,35 +84,20 @@ function Profile() {
   const handleChangeWards = (event) => {
     setWards(event.target.value);
   };
-  // React.useEffect(() => {
-  //   axiosAuth
-  //     .get("/api/province")
-  //     .catch((error) => console.log(error))
-  //     .then((res) => {
-  //       setAddress(res["data"]);
-  //     });
-  // }, []);
-
   React.useEffect(() => {
-    fetch("https://provinces.open-api.vn/api/?depth=3")
-      .then((res) => res.json())
-      .then((json) => {
-        const listProvince = json.map((j) => {
-          return {
-            id: j.code,
-            name: j.name,
-            dist: j.districts,
-          };
-        });
-        setProvince(listProvince);
+    axiosAuth
+      .get("/api/province")
+      .catch((error) => console.log(error))
+      .then((res) => {
+        setAddress(res["data"]);
       });
   }, []);
-
+  console.log(city, districts, wards, addressD);
   const handleSave = () => {
-    // if (city == "" || districts == "" || wards == "" || addressD == "") {
-    //   alert("Địa chỉ không được để trống");
-    //   return;
-    // }
+    if (city === "" || districts === "" || wards === "" || addressD === "") {
+      alert("Địa chỉ không được để trống");
+      return;
+    }
     if (name === "") {
       alert("Tên không được để trống");
       return;
@@ -164,7 +148,6 @@ function Profile() {
         }
       });
   };
-
   return (
     <>
       <Container
@@ -184,8 +167,11 @@ function Profile() {
           mt: "15px",
         }}
       >
-        <h1 style={{ fontSize: "18px", fontWeight: "700", marginLeft: "20px" }}>
-          Xin chào {user?.name} !
+        <h1>
+          Xin chào{" "}
+          <span style={{ fontSize: "18px", fontWeight: "bold" }}>
+            {user?.name}!
+          </span>{" "}
         </h1>
         <Box
           component="form"
@@ -230,7 +216,7 @@ function Profile() {
               sx={{ width: "100%" }}
               id="outlined-name"
               label="Loại tài khoản"
-              value={user?.role === 2 ? "Vendor" : "User"}
+              value={user?.role === 2 ? "vendor" : "user"}
               disabled
             />
           </Item>
@@ -265,8 +251,9 @@ function Profile() {
           <Item>
             <TextField
               sx={{ width: "100%" }}
-              label={birday !== "" ? "Ngày sinh" : " "}
-              value={birday === undefined ? "" : birday}
+              id="outlined-name"
+              label={birday != "" ? "Ngày sinh" : " "}
+              value={birday}
               onChange={(e) => setBirday(e.target.value)}
               type="date"
             />
@@ -305,7 +292,7 @@ function Profile() {
                   required
                   MenuProps={MenuProps}
                 >
-                  {province.map((city) => {
+                  {address.map((city) => {
                     return (
                       <MenuItem key={city.id} value={city.id}>
                         {city.name}
@@ -332,11 +319,11 @@ function Profile() {
                   required
                   MenuProps={MenuProps}
                 >
-                  {province.map((isCity) => {
+                  {address.map((isCity) => {
                     if (isCity.id === city) {
-                      return isCity.dist.map((dist) => {
+                      return isCity.district.map((dist) => {
                         return (
-                          <MenuItem key={dist.id} value={dist.code}>
+                          <MenuItem key={dist.id} value={dist.id}>
                             {dist.name}
                           </MenuItem>
                         );
@@ -361,13 +348,13 @@ function Profile() {
                   required
                   MenuProps={MenuProps}
                 >
-                  {province.map((isCity) => {
+                  {address.map((isCity) => {
                     if (isCity.id === city) {
-                      return isCity.dist.map((dist) => {
-                        if (dist.code === districts) {
-                          return dist.wards.map((ward) => {
+                      return isCity.district.map((dist) => {
+                        if (dist.id === districts) {
+                          return dist.ward.map((ward) => {
                             return (
-                              <MenuItem key={ward.id} value={ward.code}>
+                              <MenuItem key={ward.id} value={ward.id}>
                                 {ward.name}
                               </MenuItem>
                             );
@@ -407,10 +394,12 @@ function Profile() {
             margin: "15px 0px",
           }}
         >
-          {user?.role === 0 && (
+          {user?.role === 0 ? (
             <Button variant="contained" color="success" onClick={handleVendor}>
               Yêu cầu đối tác
             </Button>
+          ) : (
+            ""
           )}
           <Button
             sx={{ ml: "15px" }}

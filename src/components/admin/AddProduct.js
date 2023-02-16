@@ -48,37 +48,14 @@ export default function AddProduct() {
   const handleChangeWards = (event) => {
     setWards(event.target.value);
   };
-  // React.useEffect(() => {
-  //   axiosAuth
-  //     .get("/api/province")
-  //     .catch((error) => console.log(error))
-  //     .then((res) => {
-  //       setAddress(res["data"]);
-  //     });
-  // }, []);
-
   React.useEffect(() => {
-    const getProvinces = async () => {
-      await fetchProvince();
-    };
-    getProvinces(); // run it, run it
-  }, []);
-
-  const fetchProvince = () => {
-    fetch("https://provinces.open-api.vn/api/?depth=3")
+    axiosAuth
+      .get("/api/province")
       .catch((error) => console.log(error))
-      .then((res) => res.json())
-      .then((json) => {
-        const listProvince = json.map((j) => {
-          return {
-            id: j.code,
-            name: j.name,
-            dist: j.districts,
-          };
-        });
-        setAddress(listProvince);
+      .then((res) => {
+        setAddress(res["data"]);
       });
-  };
+  }, []);
 
   const upLoad = () => {
     axiosAuth
@@ -190,9 +167,9 @@ export default function AddProduct() {
               >
                 {address.map((isCity) => {
                   if (isCity.id === city) {
-                    return isCity.dist.map((dist) => {
+                    return isCity.district.map((dist) => {
                       return (
-                        <MenuItem key={dist.id} value={dist.code}>
+                        <MenuItem key={dist.id} value={dist.id}>
                           {dist.name}
                         </MenuItem>
                       );
@@ -218,11 +195,11 @@ export default function AddProduct() {
               >
                 {address.map((isCity) => {
                   if (isCity.id === city) {
-                    return isCity.dist.map((dist) => {
-                      if (dist.code === districts) {
-                        return dist.wards.map((ward) => {
+                    return isCity.district.map((dist) => {
+                      if (dist.id === districts) {
+                        return dist.ward.map((ward) => {
                           return (
-                            <MenuItem key={ward.id} value={ward.code}>
+                            <MenuItem key={ward.id} value={ward.id}>
                               {ward.name}
                             </MenuItem>
                           );
