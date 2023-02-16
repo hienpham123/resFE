@@ -106,7 +106,7 @@ function SideBar() {
             <StyleIcon>
               <AccountCircleIcon />
             </StyleIcon>
-            <ListItemText primary={user.name} />
+            <ListItemText primary={user?.name?.toUpperCase()} />
             {open === 1 ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open === 1} timeout="auto" unmountOnExit>

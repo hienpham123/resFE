@@ -407,12 +407,10 @@ function Profile() {
             margin: "15px 0px",
           }}
         >
-          {user?.role == 0 ? (
+          {user?.role === 0 && (
             <Button variant="contained" color="success" onClick={handleVendor}>
               Yêu cầu đối tác
             </Button>
-          ) : (
-            ""
           )}
           <Button
             sx={{ ml: "15px" }}

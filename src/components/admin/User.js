@@ -36,13 +36,13 @@ export default function User() {
       console.log("value", value);
       let role = "";
       console.log("role", value.role);
-      if (Number(value.role) == 0) {
+      if (Number(value.role) === 0) {
         role = "user";
       }
-      if (Number(value.role) == 1) {
+      if (Number(value.role) === 1) {
         role = "admin";
       }
-      if (Number(value.role) == 2) {
+      if (Number(value.role) === 2) {
         role = "Nhà hàng";
       }
       let data = createData(

@@ -23,7 +23,7 @@ function Carousel() {
     <Box
       className="slideShow"
       sx={{
-        height: "370px",
+        height: "750px",
         overflow: "Hidden",
       }}
     >

@@ -88,6 +88,7 @@ function Footer() {
                   sm: "1fr 1fr",
                   xs: "1fr",
                 },
+                marginLeft: "350px",
                 gap: 0,
                 width: "100%",
               }}
