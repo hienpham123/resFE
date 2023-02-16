@@ -120,23 +120,31 @@ function Footer() {
               <Item sx={{ pl: "0 !important" }}>
                 <h3 className="titleFooter">CONTACT</h3>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
-                  <span style={{ color: "red", marginRight: "15px" }}>C.</span>
+                  <span style={{ color: "red", marginRight: "15px" }}>
+                    Restaurant:
+                  </span>
                   <span style={{ color: "#8f8f8f" }}>
                     Hangxjnkhb2k1 Restaurant
                   </span>
                 </div>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
-                  <span style={{ color: "red", marginRight: "15px" }}>B.</span>
+                  <span style={{ color: "red", marginRight: "15px" }}>
+                    Address:
+                  </span>
                   <span style={{ color: "#8f8f8f" }}>
                     521 Cổ Nhuế, Bắc Từ Liêm, HN
                   </span>
                 </div>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
-                  <span style={{ color: "red", marginRight: "15px" }}>T.</span>
+                  <span style={{ color: "red", marginRight: "15px" }}>
+                    Tel:
+                  </span>
                   <span style={{ color: "#8f8f8f" }}>+84965032472</span>
                 </div>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
-                  <span style={{ color: "red", marginRight: "15px" }}>E.</span>
+                  <span style={{ color: "red", marginRight: "15px" }}>
+                    Email:
+                  </span>
                   <span style={{ color: "#8f8f8f" }}>
                     phamthehien2303@gmail.com
                   </span>
@@ -161,7 +169,7 @@ function Footer() {
             },
           }}
         >
-          <Box sx={{ py: "10px", display: "flex" }}>
+          <Box sx={{ py: "10px", display: "flex", marginLeft: "12%" }}>
             <div
               style={{ display: "flex", marginRight: "10px" }}
               className="listMxh"
@@ -273,7 +281,7 @@ function Footer() {
           </Box>
         </Container>
         <h2 style={{ margin: "15px 0px", textAlign: "center" }}>
-          Copyright ©2023 All rights reserved | Developed By Phạm Thế Hiển
+          Copyright ©2023 All rights reserved | Developed By Hiển Hồ
         </h2>
       </footer>
     </React.Fragment>
