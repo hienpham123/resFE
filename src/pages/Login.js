@@ -19,6 +19,7 @@ function Login() {
   const [token, setToken] = React.useState(false);
   const [action, setAction] = React.useState(true);
   const [user, setUser] = React.useState(false);
+
   document.title = "Login";
   const handleLogin = () => {
     let email = document.getElementById("email-login").value;

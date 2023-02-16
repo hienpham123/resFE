@@ -12,6 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { MenuProps } from "./admin/AddProduct";
+import Loader from "./loading";
+
 function Profile() {
   const [name, setName] = useState("");
   const [user, setUser] = useState(false);
@@ -24,17 +26,21 @@ function Profile() {
   const [districts, setDistricts] = React.useState("");
   const [wards, setWards] = React.useState("");
   const [addressD, setAddressD] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const handleGender = (event) => {
     setGender(event.target.value);
   };
   const navigate = useNavigate();
   useLayoutEffect(() => {
+    setIsLoading(true);
     axiosAuth
       .get("api/user")
       .catch((e) => {
         navigate("/");
       })
       .then((res) => {
+        setIsLoading(false);
         setUser(res["data"]);
         setName(res["data"].name);
         console.log(res["data"]);
@@ -102,6 +108,7 @@ function Profile() {
       alert("Tên không được để trống");
       return;
     } else {
+      setIsLoading(true);
       let formData = new FormData();
       formData.append("name", name);
       axiosAuth
@@ -134,6 +141,7 @@ function Profile() {
           .then((res1) => {
             console.log(res1["data"]);
             alert("Saved");
+            setIsLoading(false);
           });
       });
   };
@@ -150,269 +158,279 @@ function Profile() {
   };
   return (
     <>
-      <Container
-        sx={{
-          maxWidth: {
-            lg: "1240px",
-            md: "960px",
-            sm: "100%",
-            xs: "100%",
-          },
-          px: {
-            lg: "0px !important",
-            md: "0px !important",
-            sm: "15px !important",
-            xs: "15px !important",
-          },
-          mt: "15px",
-        }}
-      >
-        <h1>
-          Xin chào{" "}
-          <span style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {user?.name}!
-          </span>{" "}
-        </h1>
-        <Box
-          component="form"
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <Container
           sx={{
+            maxWidth: {
+              lg: "1240px",
+              md: "960px",
+              sm: "100%",
+              xs: "100%",
+            },
+            px: {
+              lg: "0px !important",
+              md: "0px !important",
+              sm: "15px !important",
+              xs: "15px !important",
+            },
             mt: "15px",
-            p: 0,
-            display: "grid",
-            gridTemplateColumns: {
-              lg: "1fr 1fr",
-              md: "1fr 1fr",
-              sm: "1fr 1fr",
-              xs: "1fr",
-            },
-            gap: 0,
-            width: "100%",
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <Item>
-            <TextField
-              sx={{ width: "100%" }}
-              id="outlined-name"
-              label="Họ & tên"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Item>
-
-          <Item>
-            <TextField
-              sx={{ width: "100%" }}
-              id="outlined-name"
-              label="Email"
-              value={email}
-              disabled
-            />
-          </Item>
-
-          <Item>
-            <TextField
-              sx={{ width: "100%" }}
-              id="outlined-name"
-              label="Loại tài khoản"
-              value={user?.role === 2 ? "vendor" : "user"}
-              disabled
-            />
-          </Item>
-
-          <Item>
-            <TextField
-              sx={{ width: "100%" }}
-              id="outlined-name"
-              label="Số điện thoại"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </Item>
-          <Item>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Giới tính</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={gender}
-                  label="Age"
-                  onChange={handleGender}
-                >
-                  <MenuItem value={1}>Nam</MenuItem>
-                  <MenuItem value={2}>Nữ</MenuItem>
-                  <MenuItem value={0}>Khác</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-          </Item>
-          <Item>
-            <TextField
-              sx={{ width: "100%" }}
-              id="outlined-name"
-              label={birday != "" ? "Ngày sinh" : " "}
-              value={birday}
-              onChange={(e) => setBirday(e.target.value)}
-              type="date"
-            />
-          </Item>
-        </Box>
-        <Box
-          component="form"
-          sx={{
-            my: "15px",
-            p: 0,
-            display: "grid",
-            gridTemplateColumns: {
-              lg: "1fr 1fr 1fr",
-              md: "1fr 1fr 1fr",
-              sm: "1fr 1fr 1fr",
-              xs: "1fr",
-            },
-            gap: 0,
-            width: "100%",
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <Item>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="restaurant-city-label">
-                  Tỉnh/Thành phố
-                </InputLabel>
-                <Select
-                  labelId="restaurant-city-label"
-                  id="restaurant-city"
-                  value={city}
-                  label="Tỉnh/Thành phố"
-                  onChange={handleChangeCity}
-                  required
-                  MenuProps={MenuProps}
-                >
-                  {address.map((city) => {
-                    return (
-                      <MenuItem key={city.id} value={city.id}>
-                        {city.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-          </Item>
-
-          <Item>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="restaurant-district-label">
-                  Quận/Huyện
-                </InputLabel>
-                <Select
-                  labelId="restaurant-district-label"
-                  id="restaurant-district"
-                  value={districts}
-                  label="Quận/Huyện"
-                  onChange={handleChangeDistricts}
-                  required
-                  MenuProps={MenuProps}
-                  disabled={!city}
-                >
-                  {address.map((isCity) => {
-                    if (isCity.id === city) {
-                      return isCity.district.map((dist) => {
-                        return (
-                          <MenuItem key={dist.id} value={dist.id}>
-                            {dist.name}
-                          </MenuItem>
-                        );
-                      });
-                    }
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-          </Item>
-
-          <Item>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="restaurant-wards-label">Phường/Xã</InputLabel>
-                <Select
-                  labelId="restaurant-wards-label"
-                  id="restaurant-wards"
-                  value={wards}
-                  label="Phường/Xã"
-                  onChange={handleChangeWards}
-                  required
-                  MenuProps={MenuProps}
-                  disabled={!districts}
-                >
-                  {address.map((isCity) => {
-                    if (isCity.id === city) {
-                      return isCity.district.map((dist) => {
-                        if (dist.id === districts) {
-                          return dist.ward.map((ward) => {
-                            return (
-                              <MenuItem key={ward.id} value={ward.id}>
-                                {ward.name}
-                              </MenuItem>
-                            );
-                          });
-                        }
-                      });
-                    }
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-          </Item>
-        </Box>
-        <Box
-          component="form"
-          sx={{
-            my: "15px",
-            p: 0,
-            width: "100%",
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <Item>
-            <TextField
-              sx={{ width: "100%" }}
-              id="outlined-name"
-              label="Số nhà, ngõ, đường"
-              value={addressD}
-              onChange={(e) => setAddressD(e.target.value)}
-            />
-          </Item>
-        </Box>
-        <div
-          style={{
-            textAlign: "center",
-            margin: "15px 0px",
           }}
         >
-          {user?.role === 0 ? (
-            <Button variant="contained" color="success" onClick={handleVendor}>
-              Yêu cầu đối tác
-            </Button>
-          ) : (
-            ""
-          )}
-          <Button
-            sx={{ ml: "15px" }}
-            variant="contained"
-            color="primary"
-            onClick={handleSave}
+          <h1>
+            Xin chào{" "}
+            <span style={{ fontSize: "18px", fontWeight: "bold" }}>
+              {user?.name}!
+            </span>{" "}
+          </h1>
+          <Box
+            component="form"
+            sx={{
+              mt: "15px",
+              p: 0,
+              display: "grid",
+              gridTemplateColumns: {
+                lg: "1fr 1fr",
+                md: "1fr 1fr",
+                sm: "1fr 1fr",
+                xs: "1fr",
+              },
+              gap: 0,
+              width: "100%",
+            }}
+            noValidate
+            autoComplete="off"
           >
-            Lưu
-          </Button>
-        </div>
-      </Container>
+            <Item>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-name"
+                label="Họ & tên"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Item>
+
+            <Item>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-name"
+                label="Email"
+                value={email}
+                disabled
+              />
+            </Item>
+
+            <Item>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-name"
+                label="Loại tài khoản"
+                value={user?.role === 2 ? "vendor" : "user"}
+                disabled
+              />
+            </Item>
+
+            <Item>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-name"
+                label="Số điện thoại"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </Item>
+            <Item>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Giới tính
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={gender}
+                    label="Age"
+                    onChange={handleGender}
+                  >
+                    <MenuItem value={1}>Nam</MenuItem>
+                    <MenuItem value={2}>Nữ</MenuItem>
+                    <MenuItem value={0}>Khác</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Item>
+            <Item>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-name"
+                label={birday != "" ? "Ngày sinh" : " "}
+                value={birday}
+                onChange={(e) => setBirday(e.target.value)}
+                type="date"
+              />
+            </Item>
+          </Box>
+          <Box
+            component="form"
+            sx={{
+              my: "15px",
+              p: 0,
+              display: "grid",
+              gridTemplateColumns: {
+                lg: "1fr 1fr 1fr",
+                md: "1fr 1fr 1fr",
+                sm: "1fr 1fr 1fr",
+                xs: "1fr",
+              },
+              gap: 0,
+              width: "100%",
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <Item>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="restaurant-city-label">
+                    Tỉnh/Thành phố
+                  </InputLabel>
+                  <Select
+                    labelId="restaurant-city-label"
+                    id="restaurant-city"
+                    value={city}
+                    label="Tỉnh/Thành phố"
+                    onChange={handleChangeCity}
+                    required
+                    MenuProps={MenuProps}
+                  >
+                    {address.map((city) => {
+                      return (
+                        <MenuItem key={city.id} value={city.id}>
+                          {city.name}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Item>
+
+            <Item>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="restaurant-district-label">
+                    Quận/Huyện
+                  </InputLabel>
+                  <Select
+                    labelId="restaurant-district-label"
+                    id="restaurant-district"
+                    value={districts}
+                    label="Quận/Huyện"
+                    onChange={handleChangeDistricts}
+                    required
+                    MenuProps={MenuProps}
+                    disabled={!city}
+                  >
+                    {address.map((isCity) => {
+                      if (isCity.id === city) {
+                        return isCity.district.map((dist) => {
+                          return (
+                            <MenuItem key={dist.id} value={dist.id}>
+                              {dist.name}
+                            </MenuItem>
+                          );
+                        });
+                      }
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Item>
+
+            <Item>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="restaurant-wards-label">Phường/Xã</InputLabel>
+                  <Select
+                    labelId="restaurant-wards-label"
+                    id="restaurant-wards"
+                    value={wards}
+                    label="Phường/Xã"
+                    onChange={handleChangeWards}
+                    required
+                    MenuProps={MenuProps}
+                    disabled={!districts}
+                  >
+                    {address.map((isCity) => {
+                      if (isCity.id === city) {
+                        return isCity.district.map((dist) => {
+                          if (dist.id === districts) {
+                            return dist.ward.map((ward) => {
+                              return (
+                                <MenuItem key={ward.id} value={ward.id}>
+                                  {ward.name}
+                                </MenuItem>
+                              );
+                            });
+                          }
+                        });
+                      }
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Item>
+          </Box>
+          <Box
+            component="form"
+            sx={{
+              my: "15px",
+              p: 0,
+              width: "100%",
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <Item>
+              <TextField
+                sx={{ width: "100%" }}
+                id="outlined-name"
+                label="Số nhà, ngõ, đường"
+                value={addressD}
+                onChange={(e) => setAddressD(e.target.value)}
+              />
+            </Item>
+          </Box>
+          <div
+            style={{
+              textAlign: "center",
+              margin: "15px 0px",
+            }}
+          >
+            {user?.role === 0 ? (
+              <Button
+                variant="contained"
+                color="success"
+                onClick={handleVendor}
+              >
+                Yêu cầu đối tác
+              </Button>
+            ) : (
+              ""
+            )}
+            <Button
+              sx={{ ml: "15px" }}
+              variant="contained"
+              color="primary"
+              onClick={handleSave}
+            >
+              Lưu
+            </Button>
+          </div>
+        </Container>
+      )}
     </>
   );
 }
