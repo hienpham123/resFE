@@ -76,11 +76,11 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
   };
   const handleGetData = () => {
     if (selectedValue.id === null) {
-      alert("Vui lòng chọn bàn");
+      alert("Vui lòng chọn bàn!");
       return;
     }
     if (!localStorage.getItem("timeS" + restaurantId)) {
-      alert("Vui lòng chọn giờ đến");
+      alert("Vui lòng chọn giờ đến!");
       return;
     }
     console.log("eating", selectedValue.id, restaurantId);
@@ -107,7 +107,7 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
             .then((response) => response)
             .then(function (data) {
               if (data) {
-                alert("đã đặt bàn, vui lòng chờ xác nhận");
+                alert("đã đặt bàn, vui lòng chờ xác nhận!");
                 let btn = [];
                 btn.push(
                   <Button key={0} variant="contained">
@@ -139,7 +139,7 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
       .then((response) => response)
       .then(function (data) {
         if (data) {
-          alert("Đã hủy đơn");
+          alert("Đã hủy đơn!");
           setBtnOrder([]);
         }
       });

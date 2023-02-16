@@ -136,7 +136,15 @@ function Header() {
                   sx={{ color: "black", textTransform: "capitalize" }}
                 >
                   <PersonIcon />
-                  {user ? user["name"] : "tài khoản"}
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      marginLeft: "5px",
+                    }}
+                  >
+                    {user ? user["name"] : "tài khoản"}
+                  </div>
                 </Button>
                 <Menu
                   id="basic-menu"
@@ -158,7 +166,7 @@ function Header() {
                     </div>
                   ) : (
                     <div>
-                      {user.role == 1 || user.role == 2 ? (
+                      {user.role === 1 || user.role === 2 ? (
                         <MenuItem onClick={handleClose}>
                           <Link to="admin">Admin</Link>
                         </MenuItem>

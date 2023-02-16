@@ -177,7 +177,9 @@ function Login() {
             </a>
           </Box>
           <Box sx={{ textAlign: "center", mb: "15px" }}>
-            <span>or login with</span>
+            <span style={{ fontSize: "15px", fontWeight: 600 }}>
+              or login with
+            </span>
           </Box>
           <Box
             sx={{
@@ -221,13 +223,13 @@ function Login() {
           </Box>
           <hr />
           <Box sx={{ textAlign: "center", mt: "25px" }}>
-            <p style={{ marginBottom: "15px" }}>
+            <p style={{ marginBottom: "15px", fontWeight: 600 }}>
               Check out as a guest?{" "}
               <a href="/" style={{ color: "#007bff", fontWeight: "bold" }}>
                 Click Here
               </a>
             </p>
-            <p>
+            <p style={{ fontWeight: 600 }}>
               Don't have an account?{" "}
               <Link
                 to="/regist"

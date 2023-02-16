@@ -56,6 +56,7 @@ function Carousel() {
                   },
                   gap: 0,
                   width: "100%",
+                  marginTop: "180px",
                 }}
               >
                 <Item>
