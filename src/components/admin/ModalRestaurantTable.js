@@ -122,6 +122,16 @@ export default function ModalRestaurantTable({ id }) {
     formDataRes.append("count", count);
     formDataRes.append("restaurant_id", id);
     formDataRes.append("description", desc);
+    if (
+      type === "" ||
+      chair === "" ||
+      count === "" ||
+      id === "" ||
+      desc === ""
+    ) {
+      alert("Vui lòng nhập tất cả các trường!");
+      return;
+    }
     axiosAuth
       .post("api/tableinfo", formDataRes)
       .catch((error) => console.log(error))
@@ -187,7 +197,15 @@ export default function ModalRestaurantTable({ id }) {
               },
             }}
           >
-            <h5>Thêm bàn ăn</h5>
+            <h5
+              style={{
+                fontWeight: "600",
+                marginBottom: "-30px",
+                marginTop: "20px",
+              }}
+            >
+              Thêm bàn ăn
+            </h5>
             <Box
               component="form"
               sx={{
