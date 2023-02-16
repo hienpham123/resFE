@@ -30,15 +30,15 @@ function ListSearch() {
     for (let i = 0; i < eating.length; i++) {
       console.log(eating[i]);
 
-      if (eating[i]?.city != city && city != "") {
+      if (eating[i]?.city !== city && city !== "") {
         eating.splice(i, 1);
         i--;
       } else {
-        if (eating[i]?.wards != wards && wards != "") {
+        if (eating[i]?.wards !== wards && wards !== "") {
           eating.splice(i, 1);
           i--;
         } else {
-          if (eating[i]?.dist != districts && districts != "") {
+          if (eating[i]?.dist !== districts && districts !== "") {
             eating.splice(i, 1);
             i--;
           }
@@ -143,7 +143,7 @@ function ListSearch() {
                 onChange={handleChangeDistricts}
               >
                 {address.map((isCity) => {
-                  if (isCity.id == city) {
+                  if (isCity.id === city) {
                     return isCity.district.map((dist) => {
                       return (
                         <MenuItem key={dist.id} value={dist.id}>
@@ -172,7 +172,7 @@ function ListSearch() {
                 {address.map((isCity) => {
                   if (isCity.id == city) {
                     return isCity.district.map((dist) => {
-                      if (dist.id == districts) {
+                      if (dist.id === districts) {
                         return dist.ward.map((ward) => {
                           return (
                             <MenuItem key={ward.id} value={ward.id}>

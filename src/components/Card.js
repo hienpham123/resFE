@@ -42,10 +42,10 @@ export default function ActionAreaCard({ image, price, name, hots, slug, id }) {
                   wordBreak: "break-all",
                 }}
               >
-                {name}
+                <span style={{ fontWeight: "bold" }}>{name}</span>
               </Item>
               <Item sx={{ textAlign: "right", p: "0 !important" }}>
-                {price}
+                <div>{price}đ</div>
               </Item>
             </Box>
           </CardContent>

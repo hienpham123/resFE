@@ -318,6 +318,7 @@ function Profile() {
                   onChange={handleChangeDistricts}
                   required
                   MenuProps={MenuProps}
+                  disabled={!city}
                 >
                   {address.map((isCity) => {
                     if (isCity.id === city) {
@@ -347,6 +348,7 @@ function Profile() {
                   onChange={handleChangeWards}
                   required
                   MenuProps={MenuProps}
+                  disabled={!districts}
                 >
                   {address.map((isCity) => {
                     if (isCity.id === city) {

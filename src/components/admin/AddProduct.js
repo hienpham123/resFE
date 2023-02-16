@@ -164,6 +164,7 @@ export default function AddProduct() {
                 label="Quận/Huyện"
                 onChange={handleChangeDistricts}
                 MenuProps={MenuProps}
+                disabled={!city}
               >
                 {address.map((isCity) => {
                   if (isCity.id === city) {
@@ -192,6 +193,7 @@ export default function AddProduct() {
                 label="Phường/Xã"
                 onChange={handleChangeWards}
                 MenuProps={MenuProps}
+                disabled={!districts}
               >
                 {address.map((isCity) => {
                   if (isCity.id === city) {
