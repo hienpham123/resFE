@@ -76,6 +76,15 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  const handleWait = () => {
+    sendNotification({
+      msg: "Vui lòng đợi xác nhận từ nhà hàng!",
+      variant: "info",
+    });
+    return;
+  };
+
   const handleGetData = () => {
     if (!localStorage.getItem("token")) {
       sendNotification({
@@ -98,7 +107,6 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
       });
       return;
     }
-    console.log("eating", selectedValue.id, restaurantId);
     let bodyFormData = new FormData();
     bodyFormData.set("table_id", selectedValue.id);
     bodyFormData.set("restaurant_id", restaurantId);
@@ -112,6 +120,17 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
       .then(function (data) {
         if (data) {
           let dataOrderDetail = new FormData();
+          const dishes = JSON.parse(
+            localStorage.getItem("restaurant" + restaurantId)
+          );
+          const dishesFilter = dishes.filter((e) => e.quanlity === "0");
+          if (dishesFilter.length === dishes.length) {
+            sendNotification({
+              msg: "Vui lòng chọn món ăn!",
+              variant: "warning",
+            });
+            return;
+          }
           dataOrderDetail.set(
             "eats",
             localStorage.getItem("restaurant" + restaurantId)
@@ -128,22 +147,28 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
                 });
                 let btn = [];
                 btn.push(
-                  <Button key={0} variant="contained">
-                    Đợi xác nhận
-                  </Button>
-                );
-                btn.push(
-                  <Button
-                    sx={{ ml: "15px" }}
-                    key={1}
-                    onClick={() => {
-                      handleCancel(data.data.order_id);
-                    }}
-                    variant="contained"
-                    color="error"
-                  >
-                    Hủy
-                  </Button>
+                  <>
+                    <Button
+                      key={0}
+                      variant="contained"
+                      onClick={() => {
+                        handleWait();
+                      }}
+                    >
+                      Đợi xác nhận
+                    </Button>
+                    <Button
+                      sx={{ ml: "15px" }}
+                      key={1}
+                      onClick={() => {
+                        handleCancel(data.data.order_id);
+                      }}
+                      variant="contained"
+                      color="error"
+                    >
+                      Hủy
+                    </Button>
+                  </>
                 );
                 setBtnOrder(btn);
               }
@@ -167,40 +192,45 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
   };
   const [btnOrder, setBtnOrder] = useState([]);
 
-  let orderDetail = [];
   React.useLayoutEffect(() => {
     axiosAuth
       .get(`/api/order`)
       .then((response) => response)
       .then(function (data) {
-        let datas = data.data;
-        datas.sort(SortObj("id"));
-        datas.every((e) => {
-          if (e.restaurant_id == restaurantId) {
-            if (e.status == 0) {
+        let res = data.data;
+        res.sort(SortObj("id"));
+        res.every((e) => {
+          if (e.restaurant_id === restaurantId) {
+            if (e.status === 0) {
               let btn = [];
               btn.push(
-                <Button key={0} variant="contained">
-                  Đợi xác nhận
-                </Button>
-              );
-              btn.push(
-                <Button
-                  sx={{ ml: "15px" }}
-                  key={1}
-                  onClick={() => {
-                    handleCancel(e.id);
-                  }}
-                  variant="contained"
-                  color="error"
-                >
-                  Hủy
-                </Button>
+                <>
+                  <Button
+                    key={0}
+                    variant="contained"
+                    onClick={() => {
+                      handleWait();
+                    }}
+                  >
+                    Đợi xác nhận
+                  </Button>
+                  <Button
+                    sx={{ ml: "15px" }}
+                    key={1}
+                    onClick={() => {
+                      handleCancel(e.id);
+                    }}
+                    variant="contained"
+                    color="error"
+                  >
+                    Hủy
+                  </Button>
+                </>
               );
               setBtnOrder(btn);
               return false;
             }
-            if (e.status == 1) {
+            if (e.status === 1) {
               let btn = [];
               btn.push(
                 <Button key={2} variant="contained">
@@ -437,7 +467,11 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ fontWeight: "bold" }}
+                >
                   Số lượng món ăn
                 </TableCell>
                 <TableCell
@@ -450,7 +484,11 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ fontWeight: "bold" }}
+                >
                   Giá tiền
                 </TableCell>
                 <TableCell align="right">
@@ -463,7 +501,11 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ fontWeight: "bold" }}
+                >
                   Chọn bàn
                 </TableCell>
                 <TableCell
@@ -484,7 +526,11 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{ fontWeight: "bold" }}
+                >
                   Chọn Giờ đến
                 </TableCell>
                 <TableCell
