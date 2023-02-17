@@ -77,6 +77,13 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
     setOpen(true);
   };
   const handleGetData = () => {
+    if (!localStorage.getItem("token")) {
+      sendNotification({
+        msg: "Vui lòng đăng nhập!",
+        variant: "warning",
+      });
+      return;
+    }
     if (selectedValue.id === null) {
       sendNotification({
         msg: "Vui lòng chọn bàn!",

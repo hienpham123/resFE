@@ -185,7 +185,8 @@ function Header() {
                             })
                             .then((response) => {
                               if (response["data"].msg === "logout") {
-                                localStorage.removeItem("token");
+                                // localStorage.removeItem("token");
+                                localStorage.clear();
                                 setAnchorEl(null);
                                 setUser(false);
                               }
