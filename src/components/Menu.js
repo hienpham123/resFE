@@ -29,6 +29,7 @@ import { useEffect } from "react";
 import { axiosAuth } from "../utills/axios";
 import SortObj from "./SortObj";
 import SpDialog from "./SimpleDialog";
+import useNotification from "./notification";
 const emails = [
   {
     id: null,
@@ -42,6 +43,7 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(emails[0]);
   const [selectedHours, setSelectedHours] = React.useState(0);
+  const [msg, sendNotification] = useNotification();
   const hoursSelected = [];
   for (let i = Number(isHours[0]); i <= Number(isHours[1]); i++) {
     if (i <= 12) {
@@ -76,11 +78,17 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
   };
   const handleGetData = () => {
     if (selectedValue.id === null) {
-      alert("Vui lòng chọn bàn!");
+      sendNotification({
+        msg: "Vui lòng chọn bàn!",
+        variant: "warning",
+      });
       return;
     }
     if (!localStorage.getItem("timeS" + restaurantId)) {
-      alert("Vui lòng chọn giờ đến!");
+      sendNotification({
+        msg: "Vui lòng chọn giờ đến!",
+        variant: "warning",
+      });
       return;
     }
     console.log("eating", selectedValue.id, restaurantId);
@@ -107,7 +115,10 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
             .then((response) => response)
             .then(function (data) {
               if (data) {
-                alert("đã đặt bàn, vui lòng chờ xác nhận!");
+                sendNotification({
+                  msg: "Đã đặt bàn, vui lòng chờ xác nhận!",
+                  variant: "success",
+                });
                 let btn = [];
                 btn.push(
                   <Button key={0} variant="contained">
@@ -139,14 +150,16 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
       .then((response) => response)
       .then(function (data) {
         if (data) {
-          alert("Đã hủy đơn!");
+          sendNotification({
+            msg: "Đã hủy đơn!",
+            variant: "success",
+          });
           setBtnOrder([]);
         }
       });
   };
   const [btnOrder, setBtnOrder] = useState([]);
 
-  console.log("btnOrder", btnOrder);
   let orderDetail = [];
   React.useLayoutEffect(() => {
     axiosAuth

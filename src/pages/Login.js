@@ -13,12 +13,14 @@ import { Link, Redirect, useNavigate } from "react-router-dom";
 import Item from "../components/Item";
 import { Button } from "@mui/material";
 import { axiosAuth, axiosInstance } from "../utills/axios";
+import useNotification from "../components/notification";
 function Login() {
   const navigate = useNavigate();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [token, setToken] = React.useState(false);
   const [action, setAction] = React.useState(true);
   const [user, setUser] = React.useState(false);
+  const [msg, sendNotification] = useNotification();
 
   document.title = "Login";
   const handleLogin = () => {
@@ -40,7 +42,10 @@ function Login() {
           window.localStorage.setItem("token", response["data"].token);
           navigate("/", { state: { data: response["data"].token } });
         } else {
-          alert("Sai");
+          sendNotification({
+            msg: "Email hoặc mật khẩu không chính xác!",
+            variant: "error",
+          });
         }
       });
   };

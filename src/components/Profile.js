@@ -12,7 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { MenuProps } from "./admin/AddProduct";
-import Loader from "./loading";
+import Loader from "./Loading";
+import useNotification from "./notification";
 
 function Profile() {
   const [name, setName] = useState("");
@@ -27,6 +28,7 @@ function Profile() {
   const [wards, setWards] = React.useState("");
   const [addressD, setAddressD] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [msg, sendNotification] = useNotification();
 
   const handleGender = (event) => {
     setGender(event.target.value);
@@ -98,14 +100,16 @@ function Profile() {
         setAddress(res["data"]);
       });
   }, []);
-  console.log(city, districts, wards, addressD);
   const handleSave = () => {
     if (city === "" || districts === "" || wards === "" || addressD === "") {
-      alert("Địa chỉ không được để trống");
+      sendNotification({
+        msg: "Địa chỉ không được để trống.",
+        variant: "error",
+      });
       return;
     }
     if (name === "") {
-      alert("Tên không được để trống");
+      sendNotification({ msg: "Tên không được để trống.", variant: "error" });
       return;
     } else {
       setIsLoading(true);
@@ -140,7 +144,10 @@ function Profile() {
           .catch((error) => console.log(error))
           .then((res1) => {
             console.log(res1["data"]);
-            alert("Saved");
+            sendNotification({
+              msg: "Thông tin đã được thay đổi!",
+              variant: "success",
+            });
             setIsLoading(false);
           });
       });
@@ -152,7 +159,10 @@ function Profile() {
       .catch((error) => console.log(error))
       .then((res) => {
         if (res["data"] === 1) {
-          alert("Chờ xác nhận!!!");
+          sendNotification({
+            msg: "Vui lòng chờ xác nhận!",
+            variant: "info",
+          });
         }
       });
   };

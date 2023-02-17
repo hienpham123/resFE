@@ -113,12 +113,12 @@ function RestaurantDetail() {
         >
           <Item sx={{ px: 0 }}>
             <Box>
-              {dataProducts.images && (
+              {dataProducts?.images && (
                 <img
                   alt="ảnh nhà hàng"
                   id="ImgMainPrdDt"
                   style={{ width: "100%", maxHeight: "340px" }}
-                  src={baseURLImg + dataProducts.images[0].path}
+                  src={baseURLImg + dataProducts?.images[0].path}
                 />
               )}
             </Box>
@@ -133,17 +133,17 @@ function RestaurantDetail() {
                 color: "#f51167",
               }}
             >
-              {dataProducts.name}
+              {dataProducts?.name}
             </h2>
             <p style={{ fontSize: ".75rem" }}>
               {dataProducts
-                ? dataProducts.is_address.detail +
+                ? dataProducts?.is_address?.detail +
                   ", " +
-                  dataProducts.is_address.is_wards.name +
+                  dataProducts?.is_address?.is_wards?.name +
                   ", " +
-                  dataProducts.is_address.is_district.name +
+                  dataProducts?.is_address?.is_district?.name +
                   ", " +
-                  dataProducts.is_address.is_city.name +
+                  dataProducts?.is_address?.is_city?.name +
                   "."
                 : "Null"}{" "}
               <a href="#map" style={{ color: "blue" }}>

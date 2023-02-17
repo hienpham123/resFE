@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
+    "@material/snackbar": "^14.0.0",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.2",
     "@testing-library/jest-dom": "^5.16.2",
@@ -14,6 +15,7 @@
     "chart.js": "^2.9.4",
     "clsx": "^1.1.1",
     "mapbox-gl": "^1.11.1",
+    "notistack": "^2.0.8",
     "react": "^17.0.2",
     "react-chartjs-2": "^2.10.0",
     "react-dom": "^17.0.2",
