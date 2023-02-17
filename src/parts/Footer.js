@@ -121,11 +121,9 @@ function Footer() {
                 <h3 className="titleFooter">CONTACT</h3>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
                   <span style={{ color: "red", marginRight: "15px" }}>
-                    Restaurant:
+                    Admin:
                   </span>
-                  <span style={{ color: "#8f8f8f" }}>
-                    Hangxjnkhb2k1 Restaurant
-                  </span>
+                  <span style={{ color: "#8f8f8f" }}>Hiển Hồ</span>
                 </div>
                 <div style={{ marginBottom: "15px", display: "flex" }}>
                   <span style={{ color: "red", marginRight: "15px" }}>
@@ -281,7 +279,14 @@ function Footer() {
           </Box>
         </Container>
         <h2 style={{ margin: "15px 0px", textAlign: "center" }}>
-          Copyright ©2023 All rights reserved | Developed By Hiển Hồ
+          Copyright ©2023 All rights reserved | Developed By &nbsp;
+          <a
+            style={{ color: "red" }}
+            href="https://www.facebook.com/hiendzvlone2303/"
+            target="blank"
+          >
+            Hiển Hồ
+          </a>
         </h2>
       </footer>
     </React.Fragment>

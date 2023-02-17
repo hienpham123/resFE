@@ -45,7 +45,7 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
   const [selectedHours, setSelectedHours] = React.useState(0);
   const [msg, sendNotification] = useNotification();
   const hoursSelected = [];
-  for (let i = Number(isHours[0]); i <= Number(isHours[1]); i++) {
+  for (let i = +isHours[0]; i <= +isHours[1]; i++) {
     if (i <= 12) {
       hoursSelected.push(String(i) + "h AM");
     } else {

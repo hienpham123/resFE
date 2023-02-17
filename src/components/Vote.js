@@ -10,6 +10,8 @@ import StarOutlineRoundedIcon from "@mui/icons-material/StarOutlineRounded";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { axiosAuth } from "../utills/axios";
 import SortObj from "./SortObj";
+import useNotification from "./notification";
+
 function showvoteS(maxStar = 0) {
   const listStar = [];
   for (let i = 0; i < 5; i++) {
@@ -32,12 +34,28 @@ export default function Vote({
 }) {
   const [value, setValue] = React.useState(5);
   const [description, setDescription] = React.useState("");
+  const [msg, sendNotification] = useNotification();
 
   const handleChange = (e) => {
     setDescription(e.value);
   };
   votes.sort(SortObj("id"));
-  const handleClick = () => {
+  const handleVote = () => {
+    if (!localStorage.getItem("token")) {
+      sendNotification({
+        msg: "Vui lòng đăng nhập!",
+        variant: "warning",
+      });
+      return;
+    }
+    if (!value || !description) {
+      sendNotification({
+        msg: "Bạn chưa nhập nội dung đánh giá!",
+        variant: "warning",
+      });
+      return;
+    }
+
     let bodyFormData = new FormData();
     bodyFormData.set("vote", value);
     bodyFormData.set("discription", description);
@@ -47,6 +65,8 @@ export default function Vote({
       .then((response) => response)
       .then(function (data) {
         load();
+        setValue(null);
+        setDescription("");
       });
   };
   return (
@@ -71,7 +91,7 @@ export default function Vote({
           <TextareaAutosize
             aria-label="minimum height"
             minRows={3}
-            placeholder="Nhận xét về nhà hàng"
+            placeholder="Nhận xét về nhà hàng..."
             value={description}
             style={{ width: "100%" }}
             onChange={(e) => {
@@ -82,7 +102,7 @@ export default function Vote({
         <Button
           variant="contained"
           onClick={() => {
-            handleClick();
+            handleVote();
           }}
         >
           Đánh giá
