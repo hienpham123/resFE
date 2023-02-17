@@ -196,7 +196,11 @@ export default function ModalRestaurant({ id }) {
               },
             }}
           >
-            <h5>Thêm món ăn</h5>
+            <h5
+              style={{ fontWeight: "bold", marginBottom: -30, marginTop: 15 }}
+            >
+              Thêm món ăn
+            </h5>
             <Box
               component="form"
               sx={{

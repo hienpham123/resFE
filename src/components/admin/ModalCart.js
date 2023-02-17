@@ -72,6 +72,15 @@ export default function ModelCart({ data }) {
     rows.push(createData(data.eating.name, data.quanlity, price, sum));
   });
 
+  const formatMoney = (money) => {
+    const config = {
+      style: "currency",
+      currency: "VND",
+      maximumFractionDigits: 9,
+    };
+    return new Intl.NumberFormat("vi-VN", config).format(money);
+  };
+
   return (
     <div>
       <Tooltip title="Xem thông tin">
@@ -103,9 +112,11 @@ export default function ModelCart({ data }) {
                       {row.quatity}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {row.price}
+                      {formatMoney(row.price)}
                     </StyledTableCell>
-                    <StyledTableCell align="center">{row.sum}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {formatMoney(row.sum)}
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -116,15 +127,17 @@ export default function ModelCart({ data }) {
           <Box
             sx={{
               width: "100%",
-              background: "red",
+              background: "white",
               textAlign: "right",
               h2: {
-                padding: "15px 20px",
+                padding: "15px 55px",
               },
             }}
           >
             <h2>
-              Total $<span id="sumpriceCart">{sumPrice}</span>
+              <span style={{ fontWeight: "bold" }} id="sumpriceCart">
+                {formatMoney(sumPrice)}
+              </span>
             </h2>
           </Box>
         </DialogActions>
