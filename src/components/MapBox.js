@@ -8,7 +8,7 @@ mapboxgl.accessToken =
 const Map = () => {
   const mapContainerRef = useRef(null);
   const [locate, setLocate] = useState([
-    105.78324722545909, 21.038419631821572,
+    105.77397557482165, 21.072032386291724,
   ]);
 
   // Initialize map when component mounts
