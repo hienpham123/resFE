@@ -284,6 +284,15 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
     });
   }
 
+  const formatMoney = (money) => {
+    const config = {
+      style: "currency",
+      currency: "VND",
+      maximumFractionDigits: 9,
+    };
+    return new Intl.NumberFormat("vi-VN", config).format(money);
+  };
+
   const savedata = (id, val) => {
     let obj = [
       {
@@ -413,13 +422,11 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
                 </Item>
                 <Item>
                   <div className="price">
-                    <p className="old">
-                      {e.price}
-                      <sup>đ</sup>
-                    </p>
+                    <p className="old">{formatMoney(e.price)}</p>
                     <p className="new">
-                      {Math.round(e.price - (e.price * e.discount) / 100)}
-                      <sup>đ</sup>
+                      {formatMoney(
+                        Math.round(e.price - (e.price * e.discount) / 100)
+                      )}
                     </p>
                   </div>
                   <div>
@@ -494,7 +501,7 @@ function Menu({ eating = [], restaurantId = false, table = false, isHours }) {
                 <TableCell align="right">
                   <del>{menuStg.sumPrice}</del>{" "}
                   <span style={{ color: "#f51167", fontWeight: "bold" }}>
-                    {menuStg.sumPriceD}
+                    {formatMoney(menuStg.sumPriceD)}
                   </span>
                 </TableCell>
               </TableRow>

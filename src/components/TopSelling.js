@@ -16,6 +16,16 @@ function TopSelling() {
         setEating(data.data);
       });
   }, []);
+
+  const formatMoney = (money) => {
+    const config = {
+      style: "currency",
+      currency: "VND",
+      maximumFractionDigits: 9,
+    };
+    return new Intl.NumberFormat("vi-VN", config).format(money);
+  };
+
   return (
     <Container
       sx={{
@@ -56,7 +66,7 @@ function TopSelling() {
                 <ActionAreaCard
                   name={prd.name}
                   image={baseURLImg + prd.images[0].path}
-                  price={prd.price}
+                  price={formatMoney(prd.price)}
                   news={prd.new}
                   hots={prd.discount}
                   slug={prd.restaurant.slug}
