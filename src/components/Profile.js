@@ -14,20 +14,36 @@ import Select from "@mui/material/Select";
 import { MenuProps } from "./admin/AddProduct";
 import Loader from "./Loading";
 import useNotification from "./notification";
+import {
+  useGetMyProfileQuery,
+  useUpdateNameProfileMutation,
+  useUpdateProfileMutation,
+} from "../service/user.service";
+import {
+  useChangeAddressMutation,
+  useGetProvinceQuery,
+} from "../service/province.service";
+import { toast } from "react-toastify";
 
 function Profile() {
+  const { data, isLoading, isFetching } = useGetMyProfileQuery("");
+  const province = useGetProvinceQuery("");
+  const [updateNameProfile] = useUpdateNameProfileMutation();
+  const [updateProfile] = useUpdateProfileMutation();
+  const [updateAddress] = useChangeAddressMutation();
   const [name, setName] = useState("");
   const [user, setUser] = useState(false);
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [birday, setBirday] = useState("");
   const [email, setEmail] = useState("email@gmail.com");
-  const [address, setAddress] = React.useState([]);
+  const [address, setAddress] = React.useState(province?.data || []);
   const [city, setCity] = React.useState("");
   const [districts, setDistricts] = React.useState("");
   const [wards, setWards] = React.useState("");
   const [addressD, setAddressD] = React.useState("");
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [idAddress, setIdAddress] = React.useState("");
+  // const [isLoading, setIsLoading] = React.useState(false);
   const [msg, sendNotification] = useNotification();
 
   const handleGender = (event) => {
@@ -35,48 +51,47 @@ function Profile() {
   };
   const navigate = useNavigate();
   useLayoutEffect(() => {
-    setIsLoading(true);
-    axiosAuth
-      .get("api/user")
-      .catch((e) => {
-        navigate("/");
-      })
-      .then((res) => {
-        setIsLoading(false);
-        setUser(res["data"]);
-        setName(res["data"].name);
-        console.log(res["data"]);
-        if (res["data"].info != null) {
-          setPhone(res["data"]?.info?.phone);
-          if (res["data"]?.info?.gender === "Nam") {
-            setGender(1);
-          }
-          if (res["data"]?.info?.gender === "Nữ") {
-            setGender(2);
-          }
-          if (res["data"]?.info?.gender === "khác") {
-            setGender(0);
-          }
-          setCity(res["data"]?.info?.is_address.city);
-          setDistricts(res["data"]?.info?.is_address.district);
-          setWards(res["data"]?.info?.is_address.wards);
-          setAddressD(res["data"]?.info?.is_address.detail);
-        }
-
-        setBirday(res["data"]?.info?.birday);
-        let em = res["data"].email;
-        let nameEm = em.split("@")[0].split("");
-        let s = "";
-        for (let i = 1; i < nameEm.length - 1; i++) {
-          nameEm[i] = "*";
-        }
-        for (let i = 0; i < nameEm.length; i++) {
-          s += nameEm[i];
-        }
-        s += "@" + em.split("@")[1];
-        setEmail(s);
-      });
-  }, []);
+    let res = data;
+    // setIsLoading(true);
+    // axiosAuth
+    //   .get("api/user")
+    //   .catch((e) => {
+    //     navigate("/");
+    //   })
+    //   .then((res) => {
+    //     setIsLoading(false);
+    setUser(res);
+    setName(res?.name);
+    if (res?.info != null) {
+      setPhone(res?.info?.phone);
+      if (res?.info?.gender === "Nam") {
+        setGender(1);
+      }
+      if (res?.info?.gender === "Nữ") {
+        setGender(2);
+      }
+      if (res?.info?.gender === "khác") {
+        setGender(0);
+      }
+      setCity(res?.info?.is_address?.city);
+      setDistricts(res?.info?.is_address?.district);
+      setWards(res?.info?.is_address?.wards);
+      setAddressD(res?.info?.is_address?.detail);
+    }
+    setBirday(res?.info?.birday);
+    let em = res?.email;
+    let nameEm = em?.split("@")?.[0]?.split("");
+    let s = "";
+    for (let i = 1; i < nameEm?.length - 1; i++) {
+      nameEm[i] = "*";
+    }
+    for (let i = 0; i < nameEm?.length; i++) {
+      s += nameEm?.[i];
+    }
+    s += "@" + em?.split("@")?.[1];
+    setEmail(s);
+    //   });
+  }, [data]);
 
   const handleChangeCity = (event) => {
     setCity(event.target.value);
@@ -92,15 +107,15 @@ function Profile() {
   const handleChangeWards = (event) => {
     setWards(event.target.value);
   };
-  React.useEffect(() => {
-    axiosAuth
-      .get("/api/province")
-      .catch((error) => console.log(error))
-      .then((res) => {
-        setAddress(res["data"]);
-      });
-  }, []);
-  const handleSave = () => {
+  // React.useEffect(() => {
+  //   axiosAuth
+  //     .get("/api/province")
+  //     .catch((error) => console.log(error))
+  //     .then((res) => {
+  //       setAddress(res["data"]);
+  //     });
+  // }, []);
+  const handleSave = async () => {
     if (city === "" || districts === "" || wards === "" || addressD === "") {
       sendNotification({
         msg: "Địa chỉ không được để trống.",
@@ -111,46 +126,64 @@ function Profile() {
     if (name === "") {
       sendNotification({ msg: "Tên không được để trống.", variant: "error" });
       return;
-    } else {
-      setIsLoading(true);
-      let formData = new FormData();
-      formData.append("name", name);
-      axiosAuth
-        .post("api/user", formData)
-        .catch((error) => console.log(error))
-        .then((res) => {
-          console.log(res["data"]);
-        });
     }
-    let formDataAddress = new FormData();
-    formDataAddress.append("city", city);
-    formDataAddress.append("district", districts);
-    formDataAddress.append("wards", wards);
-    formDataAddress.append("detail", addressD);
-    axiosAuth
-      .post("api/address", formDataAddress)
-      .catch((error) => console.log(error))
-      .then((res) => {
-        let id = res["data"].id;
-        let formDataInfo = new FormData();
-        formDataInfo.append("phone", phone);
-        formDataInfo.append("address", id);
-        if (gender === 1) formDataInfo.append("gender", "Nam");
-        if (gender === 2) formDataInfo.append("gender", "Nữ");
-        if (gender === 0) formDataInfo.append("gender", "Khác");
-        formDataInfo.append("birday", birday);
-        axiosAuth
-          .post("api/user-info", formDataInfo)
-          .catch((error) => console.log(error))
-          .then((res1) => {
-            console.log(res1["data"]);
-            sendNotification({
-              msg: "Thông tin đã được thay đổi!",
-              variant: "success",
-            });
-            setIsLoading(false);
-          });
-      });
+    // setIsLoading(true);
+    // let formData = new FormData();
+    // formData.append("name", name);
+    // axiosAuth
+    //   .post("api/user", formData)
+    //   .catch((error) => console.log(error))
+    //   .then((res) => {
+    //     console.log(res["data"]);
+    //   });
+    // let formDataAddress = new FormData();
+    // formDataAddress.append("city", city);
+    // formDataAddress.append("district", districts);
+    // formDataAddress.append("wards", wards);
+    // formDataAddress.append("detail", addressD);
+    // axiosAuth
+    // .post("api/address", formDataAddress)
+    // .catch((error) => console.log(error))
+    // .then((res) => {
+    //   let id = res["data"].id;
+    // let formDataInfo = new FormData();
+    // formDataInfo.append("phone", phone);
+    // formDataInfo.append("address", id);
+    // if (gender === 1) formDataInfo.append("gender", "Nam");
+    // if (gender === 2) formDataInfo.append("gender", "Nữ");
+    // if (gender === 0) formDataInfo.append("gender", "Khác");
+    // formDataInfo.append("birday", birday);
+    // axiosAuth
+    //   .post("api/user-info", formDataInfo)
+    //   .catch((error) => console.log(error))
+    //   .then((res1) => {
+    //     console.log(res1["data"]);
+    //     sendNotification({
+    //       msg: "Thông tin đã được thay đổi!",
+    //       variant: "success",
+    //     });
+    //     // setIsLoading(false);
+    //   });
+    // });
+    updateNameProfile({ name: name }).unwrap();
+    const reqAddress = {
+      city: city,
+      district: districts,
+      wards: wards,
+      detail: addressD,
+    };
+    updateAddress(reqAddress)
+      .unwrap()
+      .then((res) => setIdAddress(res.id));
+    const requestProfile = {
+      phone: phone,
+      address: idAddress,
+      gender:
+        gender === 1 ? "Nam" : gender === 2 ? "Nữ" : gender === 0 ? "Khác" : "",
+      birday: birday,
+    };
+    updateProfile(requestProfile).unwrap();
+    toast.success("Thông tin đã được thay đổi!");
   };
 
   const handleVendor = () => {
@@ -168,7 +201,7 @@ function Profile() {
   };
   return (
     <>
-      {isLoading ? (
+      {isFetching ? (
         <Loader />
       ) : (
         <Container

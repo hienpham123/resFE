@@ -16,9 +16,12 @@ import { axiosAuth, axiosInstance } from "../utills/axios";
 import useNotification from "../components/notification";
 import { useLoginMutation } from "../service/auth.service";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../redux/user-info/user-silce";
 function Login() {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
+  const dispatch = useDispatch();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [token, setToken] = React.useState(false);
   const [action, setAction] = React.useState(true);
@@ -61,9 +64,8 @@ function Login() {
     } catch (error) {
       setAction(error);
     } finally {
-      console.log("response", response);
       setToken(response.token);
-      token ? setUser(true) : setUser(false);
+      dispatch(setCurrentUser(response.user));
       if (response.token) {
         window.localStorage.setItem("token", response.token);
         navigate("/", { state: { data: response.token } });
