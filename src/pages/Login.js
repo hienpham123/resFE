@@ -14,8 +14,11 @@ import Item from "../components/Item";
 import { Button } from "@mui/material";
 import { axiosAuth, axiosInstance } from "../utills/axios";
 import useNotification from "../components/notification";
+import { useLoginMutation } from "../service/auth.service";
+import { toast } from "react-toastify";
 function Login() {
   const navigate = useNavigate();
+  const [login] = useLoginMutation();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [token, setToken] = React.useState(false);
   const [action, setAction] = React.useState(true);
@@ -23,31 +26,51 @@ function Login() {
   const [msg, sendNotification] = useNotification();
 
   document.title = "Login";
-  const handleLogin = () => {
+  const handleLogin = async () => {
     let email = document.getElementById("email-login").value;
     let pass = document.getElementById("pass-login").value;
-    console.log(email, pass);
-    axiosInstance
-      .post("/api/login", {
-        email: email,
-        password: pass,
-      })
-      .catch((error) => {
-        setAction(error);
-      })
-      .then((response) => {
-        setToken(response["data"].token);
-        token ? setUser(true) : setUser(false);
-        if (response["data"].token) {
-          window.localStorage.setItem("token", response["data"].token);
-          navigate("/", { state: { data: response["data"].token } });
-        } else {
-          sendNotification({
-            msg: "Email hoặc mật khẩu không chính xác!",
-            variant: "error",
-          });
-        }
-      });
+    // console.log(email, pass);
+    // axiosInstance
+    //   .post("/api/login", {
+    //     email: email,
+    //     password: pass,
+    //   })
+    // .catch((error) => {
+    //   setAction(error);
+    // })
+    // .then((response) => {
+    //   setToken(response["data"].token);
+    //   token ? setUser(true) : setUser(false);
+    //   if (response["data"].token) {
+    //     window.localStorage.setItem("token", response["data"].token);
+    //     navigate("/", { state: { data: response["data"].token } });
+    //   } else {
+    //     sendNotification({
+    //       msg: "Email hoặc mật khẩu không chính xác!",
+    //       variant: "error",
+    //     });
+    //   }
+    // });
+    let response;
+    const request = {
+      email: email,
+      password: pass,
+    };
+    try {
+      response = await login(request).unwrap();
+    } catch (error) {
+      setAction(error);
+    } finally {
+      console.log("response", response);
+      setToken(response.token);
+      token ? setUser(true) : setUser(false);
+      if (response.token) {
+        window.localStorage.setItem("token", response.token);
+        navigate("/", { state: { data: response.token } });
+      } else {
+        toast.error("Email hoặc mật khẩu không chính xác!");
+      }
+    }
   };
   return (
     <Container

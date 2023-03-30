@@ -8,15 +8,22 @@ import Footer from "./parts/Footer.js";
 import "./App.css";
 import "./assets/scss/app.scss";
 import { SnackbarProvider } from "notistack";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <React.Fragment>
-      <SnackbarProvider>
-        <Header />
-        <Outlet />
-        <Footer />
-      </SnackbarProvider>
+      <Provider store={store}>
+        <ToastContainer />
+        <SnackbarProvider>
+          <Header />
+          <Outlet />
+          <Footer />
+        </SnackbarProvider>
+      </Provider>
     </React.Fragment>
   );
 }
