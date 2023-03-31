@@ -10,7 +10,14 @@ export const authService = baseApi.injectEndpoints({
         body: payload,
       }),
     }),
+    register: build.mutation({
+      query: (payload) => ({
+        url: API_URLs.REGISTER,
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = authService;
+export const { useLoginMutation, useRegisterMutation } = authService;

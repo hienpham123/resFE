@@ -11,9 +11,11 @@ import { axiosAuth, axiosInstance } from "../utills/axios";
 import Item from "../components/Item";
 import { Button } from "@mui/material";
 import AlertSnackbars from "../components/AlertSnackBars";
+import { useRegisterMutation } from "../service/auth.service";
 
 function Register() {
   const navigate = useNavigate();
+  const [registerAPI] = useRegisterMutation();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   document.title = "Register";
   const [alert, setAlert] = useState(false);
@@ -22,16 +24,33 @@ function Register() {
     let email = document.getElementById("email-regist").value;
     let pass = document.getElementById("pass-regist").value;
     let cpass = document.getElementById("conFpass-regist").value;
-    axiosInstance
-      .post("/api/register", {
-        name: name,
-        email: email,
-        password: pass,
-        cpassword: cpass,
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    // axiosInstance
+    //   .post("/api/register", {
+    //     name: name,
+    //     email: email,
+    //     password: pass,
+    //     cpassword: cpass,
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   })
+    //   .then((response) => {
+    //     if (response["data"].msg === "success") {
+    //       setAlert({ action: "success", isAlert: response["data"].msg });
+    //       setTimeout(() => navigate("/login"), 3000);
+    //     } else {
+    //       setAlert({ action: "warning", isAlert: response["data"].msg });
+    //       setTimeout(() => setAlert(false), 6000);
+    //     }
+    //   });
+    const request = {
+      name: name,
+      email: email,
+      password: pass,
+      cpassword: cpass,
+    };
+    registerAPI(request)
+      .unwrap()
       .then((response) => {
         if (response["data"].msg === "success") {
           setAlert({ action: "success", isAlert: response["data"].msg });

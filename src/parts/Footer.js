@@ -26,10 +26,7 @@ function Footer() {
     "upload/images/sp5.webp",
     "upload/images/sp6.webp",
   ];
-  const CustomInput = React.forwardRef(function CustomInput(
-    props: InputUnstyledProps,
-    ref: React.ForwardedRef<HTMLDivElement>
-  ) {
+  const CustomInput = React.forwardRef(function CustomInput(props, ref) {
     return (
       <InputUnstyled
         components={{ Input: StyledInputElement }}
