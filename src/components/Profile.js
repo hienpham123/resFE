@@ -46,6 +46,7 @@ function Profile() {
   // const [isLoading, setIsLoading] = React.useState(false);
   const [msg, sendNotification] = useNotification();
 
+  const infoLocal = JSON.parse(sessionStorage.getItem("myInfo"));
   const handleGender = (event) => {
     setGender(event.target.value);
   };
@@ -116,13 +117,13 @@ function Profile() {
   //     });
   // }, []);
   const handleSave = async () => {
-    if (city === "" || districts === "" || wards === "" || addressD === "") {
-      sendNotification({
-        msg: "Địa chỉ không được để trống.",
-        variant: "error",
-      });
-      return;
-    }
+    // if (city === "" || districts === "" || wards === "" || addressD === "") {
+    //   sendNotification({
+    //     msg: "Địa chỉ không được để trống.",
+    //     variant: "error",
+    //   });
+    //   return;
+    // }
     if (name === "") {
       sendNotification({ msg: "Tên không được để trống.", variant: "error" });
       return;
@@ -165,25 +166,36 @@ function Profile() {
     //     // setIsLoading(false);
     //   });
     // });
-    updateNameProfile({ name: name }).unwrap();
-    const reqAddress = {
+    // updateNameProfile({ name: name }).unwrap();
+    // const reqAddress = {
+    //   city: city,
+    //   district: districts,
+    //   wards: wards,
+    //   detail: addressD,
+    // };
+    // updateAddress(reqAddress)
+    //   .unwrap()
+    //   .then((res) => setIdAddress(res.id));
+    // const requestProfile = {
+    //   phone: phone,
+    //   address: idAddress,
+    //   gender:
+    //     gender === 1 ? "Nam" : gender === 2 ? "Nữ" : gender === 0 ? "Khác" : "",
+    //   birday: birday,
+    // };
+    // updateProfile(requestProfile).unwrap();
+    const req = {
+      phone: phone,
+      gender:
+        gender === 1 ? "Nam" : gender === 2 ? "Nữ" : gender === 0 ? "Khác" : "",
+      birday: birday,
       city: city,
       district: districts,
       wards: wards,
       detail: addressD,
     };
-    updateAddress(reqAddress)
-      .unwrap()
-      .then((res) => setIdAddress(res.id));
-    const requestProfile = {
-      phone: phone,
-      address: idAddress,
-      gender:
-        gender === 1 ? "Nam" : gender === 2 ? "Nữ" : gender === 0 ? "Khác" : "",
-      birday: birday,
-    };
-    updateProfile(requestProfile).unwrap();
     toast.success("Thông tin đã được thay đổi!");
+    sessionStorage.setItem("myInfo", JSON.stringify(req));
   };
 
   const handleVendor = () => {
@@ -280,7 +292,7 @@ function Profile() {
                 sx={{ width: "100%" }}
                 id="outlined-name"
                 label="Số điện thoại"
-                value={phone}
+                value={phone || infoLocal.phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
             </Item>
@@ -293,7 +305,7 @@ function Profile() {
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={gender}
+                    value={gender || infoLocal.gender}
                     label="Age"
                     onChange={handleGender}
                   >
@@ -309,7 +321,7 @@ function Profile() {
                 sx={{ width: "100%" }}
                 id="outlined-name"
                 label={birday != "" ? "Ngày sinh" : " "}
-                value={birday}
+                value={birday || infoLocal.birday}
                 onChange={(e) => setBirday(e.target.value)}
                 type="date"
               />
@@ -342,7 +354,7 @@ function Profile() {
                   <Select
                     labelId="restaurant-city-label"
                     id="restaurant-city"
-                    value={city}
+                    value={city || infoLocal.city}
                     label="Tỉnh/Thành phố"
                     onChange={handleChangeCity}
                     required
@@ -350,7 +362,7 @@ function Profile() {
                   >
                     {address.map((city) => {
                       return (
-                        <MenuItem key={city.id} value={city.id}>
+                        <MenuItem key={city.id} value={city.name}>
                           {city.name}
                         </MenuItem>
                       );
@@ -369,7 +381,7 @@ function Profile() {
                   <Select
                     labelId="restaurant-district-label"
                     id="restaurant-district"
-                    value={districts}
+                    value={districts || infoLocal.district}
                     label="Quận/Huyện"
                     onChange={handleChangeDistricts}
                     required
@@ -377,10 +389,10 @@ function Profile() {
                     disabled={!city}
                   >
                     {address.map((isCity) => {
-                      if (isCity.id === city) {
+                      if (isCity.name === city) {
                         return isCity.district.map((dist) => {
                           return (
-                            <MenuItem key={dist.id} value={dist.id}>
+                            <MenuItem key={dist.id} value={dist.name}>
                               {dist.name}
                             </MenuItem>
                           );
@@ -399,7 +411,7 @@ function Profile() {
                   <Select
                     labelId="restaurant-wards-label"
                     id="restaurant-wards"
-                    value={wards}
+                    value={wards || infoLocal.wards}
                     label="Phường/Xã"
                     onChange={handleChangeWards}
                     required
@@ -407,12 +419,12 @@ function Profile() {
                     disabled={!districts}
                   >
                     {address.map((isCity) => {
-                      if (isCity.id === city) {
+                      if (isCity.name === city) {
                         return isCity.district.map((dist) => {
-                          if (dist.id === districts) {
+                          if (dist.name === districts) {
                             return dist.ward.map((ward) => {
                               return (
-                                <MenuItem key={ward.id} value={ward.id}>
+                                <MenuItem key={ward.id} value={ward.name}>
                                   {ward.name}
                                 </MenuItem>
                               );
@@ -441,7 +453,7 @@ function Profile() {
                 sx={{ width: "100%" }}
                 id="outlined-name"
                 label="Số nhà, ngõ, đường"
-                value={addressD}
+                value={addressD || infoLocal.detail}
                 onChange={(e) => setAddressD(e.target.value)}
               />
             </Item>
