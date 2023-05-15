@@ -13,10 +13,10 @@ export const grey = {
 
 export const dataSlide = [
   {
-    title: "Nhà Hàng Nhật Bản HangXjnkhb2k1",
+    title: "Nhà Hàng Nhật Bản",
     path: "/upload/images/slideshow1.jpg",
     discription:
-      "Các nguyên liệu tại HangXjnkhb2k1 tươi ngon được cam kết là hải sản từ biển Nhật vận chuyển về Việt Nam chỉ trong vòng 24h, làm nên chất lượng của nhà hàng Nhật ngon nhất Hà Nội. Ngoài nguồn nguyên liệu nhập khẩu từ biển Hokkaido thì yếu tố tạo nên sự mới mẻ và những món ăn ngon tại Hatoyama còn xuất phát từ nguồn hải sản hoàn toàn khắp 28 vùng biển Việt Nam cùng các loại hải sản đẳng cấp hàng đầu thế giới tại Nhà hàng siêu thị Thế Giới Hải Sản.",
+      "Các nguyên liệu tại tươi ngon được cam kết là hải sản từ biển Nhật vận chuyển về Việt Nam chỉ trong vòng 24h, làm nên chất lượng của nhà hàng Nhật ngon nhất Hà Nội. Ngoài nguồn nguyên liệu nhập khẩu từ biển Hokkaido thì yếu tố tạo nên sự mới mẻ và những món ăn ngon tại Hatoyama còn xuất phát từ nguồn hải sản hoàn toàn khắp 28 vùng biển Việt Nam cùng các loại hải sản đẳng cấp hàng đầu thế giới tại Nhà hàng siêu thị Thế Giới Hải Sản.",
     money: "499.000 vnd/ người",
     // address: '300 Hoàng Mai, Hà Nội'
   },
